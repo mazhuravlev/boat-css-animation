@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Мультик</title>
+    <link rel="stylesheet" href="./index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.5.10/Rx.min.js"></script>
+</head>
+<body>
+<div class="canvas">
+    <div class="box_front">
+        <div class="sea"></div>
+        <div class="ship">
+            <div class="smoke">
+                <div class="smoke-1"></div>
+                <div class="smoke-2"></div>
+                <div class="smoke-3"></div>
+            </div>
+            <div class="ship_smokestack"></div>
+            <div class="ship_window"></div>
+
+        </div>
+        <div class="sun-wrapper">
+            <div class="sun">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        <div class="cloud cloud-4"></div>
+    </div>
+</div>
+<input id="speed" style="width: 500px;" type="range" min="0.5" max="10" value="5" step="0.1"/>
+
+ 
+
+<script>
+    const s = {
+        ".canvas": 1,
+        ".box_front": 1,
+        ".ship": 1,
+        ".ship_smokestack": 1,
+        ".ship_window": 1,
+        ".smoke div": 1,
+        ".smoke-1": 1,
+        ".smoke-2": 1,
+        ".smoke-3": 1,
+        ".sun": 1,
+        ".sun-wrapper": 1,
+        ".sun div": 1,
+        ".sun div:nth-child(2)": 1,
+        ".sun div:nth-child(3)": 1,
+        ".sun div:nth-child(4)": 1,
+        ".sun div:nth-child(5)": 1,
+        ".sun div:nth-child(6)": 1,
+        ".sun div:nth-child(7)": 1,
+        ".sun div:nth-child(8)": 1,
+        ".sun div:nth-child(9)": 1,
+        ".sun div:nth-child(10)": 1,
+        ".cloud": 1,
+        ".cloud-1": 1,
+        ".cloud-2": 1,
+        ".cloud-3": 1,
+        ".cloud-4": 1,
+        ".sea": 1
+    };
+    const rules = Array.prototype.slice.call(document.styleSheets[0].rules).map(x => ({selector: x.selectorText, style: x.style, rule: x})).filter(x => x.rule instanceof CSSStyleRule);
+    function update(value) {
+        rules.forEach(rule => {
+            if(rule.style.animationDuration) {
+                rule.style.animationDuration = s[rule.selector] * value + 's';
+            }
+        });
+    }
+    function randomize() {
+        for(let x in s) {
+            s[x] = s[x] + s[x] * Math.random()-0.5;
+        }
+        update();
+    }
+    randomize();
+    Rx.Observable.fromEvent(document.getElementById('speed'), 'input').debounceTime(300).subscribe((e) => update(e.target.value));
+</script>
+</body>
+</html>
